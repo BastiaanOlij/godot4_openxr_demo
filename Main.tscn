@@ -1,0 +1,84 @@
+[gd_scene load_steps=14 format=3 uid="uid://dp1w8qmqbqe41"]
+
+[ext_resource type="Script" path="res://Main.gd" id="1_yxygs"]
+[ext_resource type="Texture2D" uid="uid://c42u81snu2y8r" path="res://assets/wahooney.itch.io/green_grid.png" id="2_1ux36"]
+[ext_resource type="Texture2D" uid="uid://cl01r5glqm4cs" path="res://assets/wahooney.itch.io/blue_grid.png" id="2_jelqw"]
+[ext_resource type="Texture2D" uid="uid://bi5lmbe02yrse" path="res://assets/wahooney.itch.io/white_grid.png" id="3_36cx1"]
+
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_oh7xr"]
+
+[sub_resource type="Sky" id="Sky_qbv3c"]
+sky_material = SubResource( "PhysicalSkyMaterial_oh7xr" )
+
+[sub_resource type="Environment" id="Environment_v7gtd"]
+background_mode = 2
+sky = SubResource( "Sky_qbv3c" )
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5by0e"]
+albedo_texture = ExtResource( "2_jelqw" )
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_q82ol"]
+material = SubResource( "StandardMaterial3D_5by0e" )
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ny63w"]
+albedo_texture = ExtResource( "3_36cx1" )
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_23qee"]
+material = SubResource( "StandardMaterial3D_ny63w" )
+size = Vector3(1, 1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_o1wyt"]
+size = Vector2(100, 100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_meo44"]
+albedo_texture = ExtResource( "2_1ux36" )
+uv1_scale = Vector3(0.25, 0.25, 0.25)
+uv1_triplanar = true
+
+[node name="Main" type="Node3D"]
+script = ExtResource( "1_yxygs" )
+
+[node name="XROrigin3D" type="XROrigin3D" parent="."]
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( "Environment_v7gtd" )
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.821547, 0.247955, -0.513399, 0.0667756, 0.852434, 0.518553, 0.566216, -0.460298, 0.683758, 0, 4.81216, 0)
+
+[node name="Boxes" type="Node3D" parent="."]
+
+[node name="Box01" type="MeshInstance3D" parent="Boxes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -5.14926)
+mesh = SubResource( "BoxMesh_q82ol" )
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Boxes/Box01"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.97566, 0, 0)
+mesh = SubResource( "BoxMesh_23qee" )
+
+[node name="Box02" type="MeshInstance3D" parent="Boxes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 4.55403)
+mesh = SubResource( "BoxMesh_q82ol" )
+skeleton = NodePath("../..")
+
+[node name="Box03" type="MeshInstance3D" parent="Boxes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.7366, 1, -0.16736)
+mesh = SubResource( "BoxMesh_q82ol" )
+skeleton = NodePath("../..")
+
+[node name="Box04" type="MeshInstance3D" parent="Boxes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5241, 1, -0.16736)
+mesh = SubResource( "BoxMesh_q82ol" )
+skeleton = NodePath("../..")
+
+[node name="Floor" type="StaticBody3D" parent="."]
+
+[node name="FloorMesh" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource( "PlaneMesh_o1wyt" )
+surface_material_override/0 = SubResource( "StandardMaterial3D_meo44" )
