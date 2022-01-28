@@ -1,9 +1,12 @@
-[gd_scene load_steps=14 format=3 uid="uid://dp1w8qmqbqe41"]
+[gd_scene load_steps=15 format=3 uid="uid://dp1w8qmqbqe41"]
 
 [ext_resource type="Script" path="res://Main.gd" id="1_yxygs"]
 [ext_resource type="Texture2D" uid="uid://c42u81snu2y8r" path="res://assets/wahooney.itch.io/green_grid.png" id="2_1ux36"]
 [ext_resource type="Texture2D" uid="uid://cl01r5glqm4cs" path="res://assets/wahooney.itch.io/blue_grid.png" id="2_jelqw"]
 [ext_resource type="Texture2D" uid="uid://bi5lmbe02yrse" path="res://assets/wahooney.itch.io/white_grid.png" id="3_36cx1"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_0keqv"]
+size = Vector3(0.05, 0.05, 0.05)
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_oh7xr"]
 
@@ -44,6 +47,23 @@ script = ExtResource( "1_yxygs" )
 
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+
+[node name="LeftHand" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -0.5)
+tracker = &"left_hand"
+pose = &"aim_pose"
+
+[node name="TestMesh" type="MeshInstance3D" parent="XROrigin3D/LeftHand"]
+mesh = SubResource( "BoxMesh_0keqv" )
+
+[node name="RightHand" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)
+tracker = &"right_hand"
+pose = &"aim_pose"
+
+[node name="TestMesh" type="MeshInstance3D" parent="XROrigin3D/RightHand"]
+mesh = SubResource( "BoxMesh_0keqv" )
+skeleton = NodePath("../../LeftHand")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( "Environment_v7gtd" )
