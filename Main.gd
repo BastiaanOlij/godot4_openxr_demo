@@ -12,3 +12,7 @@ func _ready():
 		vp.use_xr = true
 		
 
+
+
+func _on_right_hand_button_pressed(name):
+	print("Pressed " + str(name))
