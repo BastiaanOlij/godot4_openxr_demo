@@ -31,3 +31,4 @@ xr/enabled=true
 [xr]
 
 openxr/enabled=true
+shaders/enabled=true

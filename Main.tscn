@@ -31,7 +31,6 @@ uv1_triplanar = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_23qee"]
 material = SubResource( "StandardMaterial3D_ny63w" )
-size = Vector3(1, 1, 1)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_o1wyt"]
 size = Vector2(100, 100)
