@@ -36,6 +36,9 @@ extends Node
 ## Player radius
 @export var player_radius : float = 0.4
 
+## Player camera to head top
+@export var player_cam_to_head_top : float = 0.1
+
 ## Eyes forward offset from center of body in player_radius units
 @export_range(0.0, 1.0) var eye_forward_offset : float = 0.66
 
@@ -204,13 +207,13 @@ func move_and_slide(p_velocity: Vector3) -> Vector3:
 # This method updates the body to match the player position
 func _update_body_under_camera():
 	# Calculate the player height based on the origin and camera position
-	var player_height := camera_node.transform.origin.y + player_radius
+	var player_height := camera_node.transform.origin.y + player_cam_to_head_top
 	if player_height < player_radius:
 		player_height = player_radius
 
 	# Adjust the collision shape to match the player geometry
 	_collision_node.shape.radius = player_radius
-	_collision_node.shape.height = player_height # - (player_radius * 2.0)
+	_collision_node.shape.height = player_height
 	_collision_node.transform.origin.y = (player_height / 2.0)
 
 	# Center the kinematic body on the ground under the camera

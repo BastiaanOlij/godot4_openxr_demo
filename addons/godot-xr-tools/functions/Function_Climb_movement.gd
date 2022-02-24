@@ -38,10 +38,10 @@ signal player_climb_end
 @export var velocity_averages : int = 5
 
 ## Pickup function for the left hand
-@export_node_path(XRToolsPickable) var left_pickup
+@export var left_pickup : NodePath
 
 ## Pickup function for the right hand
-@export_node_path(XRToolsPickable) var right_pickup
+@export var right_pickup : NodePath
 
 # Is the player climbing
 var is_climbing : bool = false

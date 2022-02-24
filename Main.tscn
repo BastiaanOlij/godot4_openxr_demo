@@ -1,15 +1,16 @@
-[gd_scene load_steps=21 format=3 uid="uid://dp1w8qmqbqe41"]
+[gd_scene load_steps=18 format=3 uid="uid://dp1w8qmqbqe41"]
 
 [ext_resource type="Script" path="res://Main.gd" id="1_yxygs"]
 [ext_resource type="Texture2D" uid="uid://c42u81snu2y8r" path="res://assets/wahooney.itch.io/green_grid.png" id="2_1ux36"]
 [ext_resource type="PackedScene" uid="uid://dkbe7ndgv0ovc" path="res://addons/godot-xr-tools/functions/Function_Direct_movement.tscn" id="2_g0m70"]
 [ext_resource type="PackedScene" uid="uid://cc6ngdqie8o8c" path="res://addons/godot-xr-tools/effects/vignette.tscn" id="2_jb8qg"]
-[ext_resource type="Texture2D" uid="uid://cl01r5glqm4cs" path="res://assets/wahooney.itch.io/blue_grid.png" id="2_jelqw"]
 [ext_resource type="PackedScene" uid="uid://ks5advemsv8d" path="res://addons/godot-xr-tools/assets/LeftHand.tscn" id="2_ks6r2"]
-[ext_resource type="Texture2D" uid="uid://bi5lmbe02yrse" path="res://assets/wahooney.itch.io/white_grid.png" id="3_36cx1"]
 [ext_resource type="PackedScene" uid="uid://b0ywd51y32i51" path="res://addons/godot-xr-tools/functions/Function_Teleport.tscn" id="4_3i8dd"]
 [ext_resource type="PackedScene" uid="uid://b7li7qei42jud" path="res://addons/godot-xr-tools/assets/RightHand.tscn" id="4_mos32"]
+[ext_resource type="PackedScene" path="res://addons/godot-xr-tools/functions/Function_Pickup.tscn" id="5_5tsqm"]
 [ext_resource type="PackedScene" uid="uid://dxwrf3facunbq" path="res://addons/godot-xr-tools/assets/PlayerBody.tscn" id="6_pxggg"]
+[ext_resource type="PackedScene" path="res://addons/godot-xr-tools/functions/Function_Climb_movement.tscn" id="8_14dk1"]
+[ext_resource type="PackedScene" uid="uid://bke13y3ndyo3b" path="res://assets/misc/ladder.tscn" id="9_2sgf8"]
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_oh7xr"]
 
@@ -19,20 +20,6 @@ sky_material = SubResource( "PhysicalSkyMaterial_oh7xr" )
 [sub_resource type="Environment" id="Environment_v7gtd"]
 background_mode = 2
 sky = SubResource( "Sky_qbv3c" )
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5by0e"]
-albedo_texture = ExtResource( "2_jelqw" )
-uv1_triplanar = true
-
-[sub_resource type="BoxMesh" id="BoxMesh_q82ol"]
-material = SubResource( "StandardMaterial3D_5by0e" )
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ny63w"]
-albedo_texture = ExtResource( "3_36cx1" )
-uv1_triplanar = true
-
-[sub_resource type="BoxMesh" id="BoxMesh_23qee"]
-material = SubResource( "StandardMaterial3D_ny63w" )
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_o1wyt"]
 size = Vector2(100, 100)
@@ -65,6 +52,8 @@ pose = &"aim"
 [node name="Function_Teleport" parent="XROrigin3D/LeftHand" instance=ExtResource( "4_3i8dd" )]
 camera = NodePath("../../XRCamera3D")
 
+[node name="Function_Pickup" parent="XROrigin3D/LeftHand" instance=ExtResource( "5_5tsqm" )]
+
 [node name="RightHand" type="XRController3D" parent="XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)
 tracker = &"right_hand"
@@ -75,39 +64,20 @@ pose = &"aim"
 [node name="Function_Direct_movement" parent="XROrigin3D/RightHand" instance=ExtResource( "2_g0m70" )]
 canFly = false
 
+[node name="Function_Pickup" parent="XROrigin3D/RightHand" instance=ExtResource( "5_5tsqm" )]
+
 [node name="PlayerBody" parent="XROrigin3D" instance=ExtResource( "6_pxggg" )]
+
+[node name="Function_Climb_movement" parent="XROrigin3D" instance=ExtResource( "8_14dk1" )]
+left_pickup = NodePath("../LeftHand/Function_Pickup")
+right_pickup = NodePath("../RightHand/Function_Pickup")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( "Environment_v7gtd" )
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.821547, 0.247955, -0.513399, 0.0667756, 0.852434, 0.518553, 0.566216, -0.460298, 0.683758, 0, 4.81216, 0)
-
-[node name="Boxes" type="Node3D" parent="."]
-
-[node name="Box01" type="MeshInstance3D" parent="Boxes"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -5.14926)
-mesh = SubResource( "BoxMesh_q82ol" )
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Boxes/Box01"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.97566, 0, 0)
-mesh = SubResource( "BoxMesh_23qee" )
-
-[node name="Box02" type="MeshInstance3D" parent="Boxes"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 4.55403)
-mesh = SubResource( "BoxMesh_q82ol" )
-skeleton = NodePath("../..")
-
-[node name="Box03" type="MeshInstance3D" parent="Boxes"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.7366, 1, -0.16736)
-mesh = SubResource( "BoxMesh_q82ol" )
-skeleton = NodePath("../..")
-
-[node name="Box04" type="MeshInstance3D" parent="Boxes"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5241, 1, -0.16736)
-mesh = SubResource( "BoxMesh_q82ol" )
-skeleton = NodePath("../..")
+transform = Transform3D(0.821547, 0.247955, -0.513399, 0.189303, 0.730762, 0.655859, 0.537796, -0.636008, 0.553417, 0, 4.81216, 0)
+light_energy = 2.0
 
 [node name="Floor" type="StaticBody3D" parent="."]
 
@@ -118,5 +88,20 @@ surface_material_override/0 = SubResource( "StandardMaterial3D_meo44" )
 [node name="FloorCollision" type="CollisionShape3D" parent="Floor"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 shape = SubResource( "BoxShape3D_p3pdx" )
+
+[node name="MonkeyBars" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Ladder01" parent="MonkeyBars" instance=ExtResource( "9_2sgf8" )]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Ladder02" parent="MonkeyBars" instance=ExtResource( "9_2sgf8" )]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="Ladder03" parent="MonkeyBars" instance=ExtResource( "9_2sgf8" )]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 3.9, 0)
+
+[node name="Ladder04" parent="MonkeyBars" instance=ExtResource( "9_2sgf8" )]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 3.9, -4)
 
 [connection signal="button_pressed" from="XROrigin3D/RightHand" to="." method="_on_right_hand_button_pressed"]

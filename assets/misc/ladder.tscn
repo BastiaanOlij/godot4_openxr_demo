@@ -1,0 +1,51 @@
+[gd_scene load_steps=5 format=3 uid="uid://bke13y3ndyo3b"]
+
+[ext_resource type="PackedScene" path="res://addons/godot-xr-tools/objects/Object_climbable.tscn" id="1_0qghb"]
+[ext_resource type="PackedScene" uid="uid://d346yp1mwx747" path="res://assets/misc/ladder.glb" id="2_pobln"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_v35l4"]
+radius = 0.1
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_x80i4"]
+radius = 0.1
+height = 4.0
+
+[node name="Ladder" instance=ExtResource( "1_0qghb" )]
+
+[node name="CollisionShape3D" parent="." index="0"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.2, 0)
+shape = SubResource( "CylinderShape3D_v35l4" )
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource( "CylinderShape3D_v35l4" )
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="." index="2"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 1.4, 0)
+shape = SubResource( "CylinderShape3D_v35l4" )
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="." index="3"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource( "CylinderShape3D_v35l4" )
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="." index="4"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 2.6, 0)
+shape = SubResource( "CylinderShape3D_v35l4" )
+
+[node name="CollisionShape3D6" type="CollisionShape3D" parent="." index="5"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 3.2, 0)
+shape = SubResource( "CylinderShape3D_v35l4" )
+
+[node name="CollisionShape3D7" type="CollisionShape3D" parent="." index="6"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 3.8, 0)
+shape = SubResource( "CylinderShape3D_v35l4" )
+
+[node name="CollisionShape3D8" type="CollisionShape3D" parent="." index="7"]
+transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 1, -1, 2, 0)
+shape = SubResource( "CylinderShape3D_x80i4" )
+
+[node name="CollisionShape3D9" type="CollisionShape3D" parent="." index="8"]
+transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 1, 1, 2, 0)
+shape = SubResource( "CylinderShape3D_x80i4" )
+
+[node name="ladder" parent="." index="9" instance=ExtResource( "2_pobln" )]
