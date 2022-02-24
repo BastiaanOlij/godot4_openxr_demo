@@ -33,7 +33,7 @@ func _update_screen_size():
 func _update_viewport_size():
 	$Viewport.size = viewport_size
 	$StaticBody3D.viewport_size = viewport_size
-	var material : StandardMaterial3D = $Screen.get_surface_material(0)
+	var material : StandardMaterial3D = $Screen.get_surface_override_material(0)
 	material.albedo_texture = $Viewport.get_texture()
 
 @export var transparent = true:
@@ -43,7 +43,7 @@ func _update_viewport_size():
 			_update_transparent()
 
 func _update_transparent():
-	var material : StandardMaterial3D = $Screen.get_surface_material(0)
+	var material : StandardMaterial3D = $Screen.get_surface_override_material(0)
 	material.flags_transparent = transparent
 	$Viewport.transparent_bg = transparent
 

@@ -31,8 +31,8 @@ func _update_show_laser():
 			_update_y_offset()
 
 func _update_y_offset():
-	$Laser.translation.y = y_offset * ws
-	$RayCast.translation.y = y_offset * ws
+	$Laser.position.y = y_offset * ws
+	$RayCast.position.y = y_offset * ws
 
 @export var distance = 10:
 	set(new_value):
@@ -42,7 +42,7 @@ func _update_y_offset():
 
 func _update_distance():
 	$Laser.mesh.size.z = distance
-	$Laser.translation.z = distance * -0.5
+	$Laser.position.z = distance * -0.5
 	$RayCast.cast_to.z = -distance
 
 @export_flags_3d_physics  var collision_mask = 15:

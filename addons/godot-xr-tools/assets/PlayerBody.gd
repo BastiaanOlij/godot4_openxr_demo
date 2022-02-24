@@ -192,14 +192,14 @@ func _physics_process(delta):
 
 # Perform a move_and_slide on the kinematic node
 func move_and_slide(p_velocity: Vector3) -> Vector3:
-	kinematic_node.motion_velocity = p_velocity
+	kinematic_node.velocity = p_velocity
 	kinematic_node.up_direction = Vector3.UP
 	kinematic_node.floor_stop_on_slope = false
 	kinematic_node.floor_max_angle = 0.785398
 	kinematic_node.max_slides = 4
 	# push_rigid_bodies seems to no longer be supported...
 	var can_move = kinematic_node.move_and_slide()
-	return kinematic_node.motion_velocity
+	return kinematic_node.velocity
 
 # This method updates the body to match the player position
 func _update_body_under_camera():
@@ -210,7 +210,7 @@ func _update_body_under_camera():
 
 	# Adjust the collision shape to match the player geometry
 	_collision_node.shape.radius = player_radius
-	_collision_node.shape.height = player_height - (player_radius * 2.0)
+	_collision_node.shape.height = player_height # - (player_radius * 2.0)
 	_collision_node.transform.origin.y = (player_height / 2.0)
 
 	# Center the kinematic body on the ground under the camera

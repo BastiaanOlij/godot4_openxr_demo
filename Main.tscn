@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://dp1w8qmqbqe41"]
+[gd_scene load_steps=21 format=3 uid="uid://dp1w8qmqbqe41"]
 
 [ext_resource type="Script" path="res://Main.gd" id="1_yxygs"]
 [ext_resource type="Texture2D" uid="uid://c42u81snu2y8r" path="res://assets/wahooney.itch.io/green_grid.png" id="2_1ux36"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://cl01r5glqm4cs" path="res://assets/wahooney.itch.io/blue_grid.png" id="2_jelqw"]
 [ext_resource type="PackedScene" uid="uid://ks5advemsv8d" path="res://addons/godot-xr-tools/assets/LeftHand.tscn" id="2_ks6r2"]
 [ext_resource type="Texture2D" uid="uid://bi5lmbe02yrse" path="res://assets/wahooney.itch.io/white_grid.png" id="3_36cx1"]
+[ext_resource type="PackedScene" uid="uid://b0ywd51y32i51" path="res://addons/godot-xr-tools/functions/Function_Teleport.tscn" id="4_3i8dd"]
 [ext_resource type="PackedScene" uid="uid://b7li7qei42jud" path="res://addons/godot-xr-tools/assets/RightHand.tscn" id="4_mos32"]
 [ext_resource type="PackedScene" uid="uid://dxwrf3facunbq" path="res://addons/godot-xr-tools/assets/PlayerBody.tscn" id="6_pxggg"]
 
@@ -60,6 +61,9 @@ tracker = &"left_hand"
 pose = &"aim"
 
 [node name="LeftHand" parent="XROrigin3D/LeftHand" instance=ExtResource( "2_ks6r2" )]
+
+[node name="Function_Teleport" parent="XROrigin3D/LeftHand" instance=ExtResource( "4_3i8dd" )]
+camera = NodePath("../../XRCamera3D")
 
 [node name="RightHand" type="XRController3D" parent="XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)

@@ -48,11 +48,11 @@ func action():
 func _update_highlight():
 	if highlight_mesh_instance_node:
 		# if we can find a node remember which materials are currently set on each surface
-		for i in range(0, highlight_mesh_instance_node.get_surface_material_count()):
+		for i in range(0, highlight_mesh_instance_node.get_surface_override_material_count()):
 			if closest_count > 0:
-				highlight_mesh_instance_node.set_surface_material(i, highlight_material)
+				highlight_mesh_instance_node.set_surface_override_material(i, highlight_material)
 			else:
-				highlight_mesh_instance_node.set_surface_material(i, original_materials[i])
+				highlight_mesh_instance_node.set_surface_override_material(i, original_materials[i])
 	else:
 		# should probably implement this in our subclass
 		pass
@@ -142,8 +142,8 @@ func _ready():
 		highlight_mesh_instance_node = get_node(highlight_mesh_instance)
 		if highlight_mesh_instance_node:
 			# if we can find a node remember which materials are currently set on each surface
-			for i in range(0, highlight_mesh_instance_node.get_surface_material_count()):
-				original_materials.push_back(highlight_mesh_instance_node.get_surface_material(i))
+			for i in range(0, highlight_mesh_instance_node.get_surface_override_material_count()):
+				original_materials.push_back(highlight_mesh_instance_node.get_surface_override_material(i))
 
 	# if we have center pickup on set obtain our node
 	if reset_transform_on_pickup:

@@ -16,6 +16,7 @@ extends CharacterBody3D
 			pass
 
 @export var teleport_button_action = "trigger_click"
+@export var rotation_action = "primary"
 @export var can_teleport_color : Color = Color(0.0, 1.0, 0.0, 1.0)
 @export var cant_teleport_color : Color = Color(1.0, 0.0, 0.0, 1.0)
 @export var no_collision_color : Color = Color(45.0 / 255.0, 80.0 / 255.0, 220.0 / 255.0, 1.0)
@@ -29,8 +30,8 @@ func _update_player_height():
 		collision_shape.height = player_height - (2.0 * player_radius)
 
 	if capsule:
-		capsule.mesh.mid_height = player_height - (2.0 * player_radius)
-		capsule.translation = Vector3(0.0, player_height/2.0, 0.0)
+		capsule.mesh.height = player_height
+		capsule.position = Vector3(0.0, player_height/2.0, 0.0)
 
 @export var player_radius : float = 0.4:
 	set(new_value):
@@ -39,11 +40,11 @@ func _update_player_height():
 
 func _update_player_radius():
 	if collision_shape:
-		collision_shape.height = player_height - (2.0 * player_radius)
+		collision_shape.height = player_height # - (2.0 * player_radius)
 		collision_shape.radius = player_radius
 
 	if capsule:
-		capsule.mesh.mid_height = player_height - (2.0 * player_radius)
+		capsule.mesh.height = player_height
 		capsule.mesh.radius = player_radius
 
 
@@ -65,14 +66,14 @@ var can_teleport = true
 var teleport_rotation = 0.0;
 var floor_normal = Vector3(0.0, 1.0, 0.0)
 var last_target_transform = Transform3D()
-var collision_shape : CollisionShape3D
+var collision_shape : Shape3D
 var step_size = 0.5
 
 # By default we show a capsule to indicate where the player lands.
 # Turn on editable children,
 # hide the capsule,
 # and add your own player character as child.
-@onready var capsule = get_node("Target/Player_figure/Capsule")
+@onready var capsule : MeshInstance3D = get_node("Target/Player_figure/Capsule")
 
 func _get_configuration_warning():
 	if camera == null:
@@ -161,8 +162,8 @@ func _physics_process(delta):
 		query.margin = get_safe_margin()
 		query.shape_rid = collision_shape.get_rid()
 		
-		# make a transform for rotating and offseting our shape, it's always lying on its side by default...
-		var shape_transform = Transform3D(Basis(Vector3(1.0, 0.0, 0.0), deg2rad(90.0)), Vector3(0.0, player_height / 2.0, 0.0))
+		# make a transform for offsetting our shape, it's always lying on its side by default...
+		var shape_transform = Transform3D(Basis(), Vector3(0.0, player_height / 2.0, 0.0))
 		
 		# update location
 		var teleport_global_transform = $Teleport.global_transform
@@ -187,7 +188,7 @@ func _physics_process(delta):
 			var t2 = t * t
 			
 			# target to world space
-			global_target = teleport_global_transform.xform(global_target)
+			global_target = teleport_global_transform * global_target
 			
 			# adjust for gravity
 			global_target += down * t2
@@ -195,7 +196,7 @@ func _physics_process(delta):
 			# test our new location for collisions
 			query.transform = Transform3D(Basis(), global_target) * shape_transform
 			var cast_result = state.collide_shape(query, 10)
-			if cast_result.empty():
+			if cast_result.is_empty():
 				# we didn't collide with anything so check our next section...
 				cast_length = new_cast_length
 				target_global_origin = global_target
@@ -212,13 +213,13 @@ func _physics_process(delta):
 					is_on_floor = false
 				else:
 					# now we cast a ray downwards to see if we're on a surface
-					var ray_query : PhysicsRayQueryParameters3D
+					var ray_query = PhysicsRayQueryParameters3D.new()
 					ray_query.from = target_global_origin + (Vector3.UP * 0.5 * player_height)
 					ray_query.to = target_global_origin - (Vector3.UP * 1.1 * player_height)
 					ray_query.collision_mask = collision_mask
 
 					var intersects = state.intersect_ray(ray_query)
-					if intersects.empty():
+					if intersects.is_empty():
 						is_on_floor = false
 					else:
 						# did we collide with a floor or a wall?
@@ -243,9 +244,9 @@ func _physics_process(delta):
 				break
 		
 		# and just update our shader
-		$Teleport.get_surface_material(0).set_shader_param("scale_t", 1.0 / strength)
-		$Teleport.get_surface_material(0).set_shader_param("ws", ws)
-		$Teleport.get_surface_material(0).set_shader_param("length", cast_length)
+		$Teleport.get_surface_override_material(0).set_shader_param("scale_t", 1.0 / strength)
+		$Teleport.get_surface_override_material(0).set_shader_param("ws", ws)
+		$Teleport.get_surface_override_material(0).set_shader_param("length", cast_length)
 		if hit_something:
 			var color = can_teleport_color
 			var normal = Vector3.UP
@@ -258,7 +259,7 @@ func _physics_process(delta):
 				color = cant_teleport_color
 			
 			# check our axis to see if we need to rotate
-			teleport_rotation += (delta * controller.get_joystick_axis(0) * -4.0)
+			teleport_rotation += (delta * controller.get_axis(rotation_action).x * -4.0)
 			
 			# update target and colour
 			var target_basis = Basis()
@@ -272,13 +273,13 @@ func _physics_process(delta):
 			last_target_transform.origin = target_global_origin + Vector3(0.0, 0.001, 0.0)
 			$Target.global_transform = last_target_transform
 			
-			$Teleport.get_surface_material(0).set_shader_param("mix_color", color)
-			$Target.get_surface_material(0).albedo_color = color
+			$Teleport.get_surface_override_material(0).set_shader_param("mix_color", color)
+			$Target.get_surface_override_material(0).albedo_color = color
 			$Target.visible = can_teleport
 		else:
 			can_teleport = false
 			$Target.visible = false
-			$Teleport.get_surface_material(0).set_shader_param("mix_color", no_collision_color)
+			$Teleport.get_surface_override_material(0).set_shader_param("mix_color", no_collision_color)
 	elif is_teleporting:
 		if can_teleport:
 			
