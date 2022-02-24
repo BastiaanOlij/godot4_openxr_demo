@@ -1,251 +1,158 @@
-extends Node
+@tool
+class_name Function_DirectMovement
+extends MovementProvider
+
+##
+## Movement Provider for Direct Movement
+##
+## @desc:
+##     This script works with the Function_Direct_movement asset to provide
+##     direct movement for the player. This script works with the PlayerBody
+##     attached to the players XROrigin3D.
+##
+##     The following types of direct movement are supported:
+##      - Flying
+##      - Snap turning
+##      - Smooth turning
+##      - Slewing
+##      - Forwards and backwards motion
+##
+##     The player may have multiple direct movement nodes attached to different
+##     controllers to provide different types of direct movement.
+##
+##     Direct movement with flight support should be ordered after any direct
+##     movement providing rotation. This is to ensure the rotation is performed
+##     before the flight performs its exclusive control (which prevents any
+##     other type of motion form occurring)
+##
 
 enum MOVEMENT_TYPE { MOVE_AND_ROTATE, MOVE_AND_STRAFE }
 
-# Is this active?
-@export var enabled = true:
-	set(new_value):
-		enabled = new_value
-		if collision_shape:
-			collision_shape.disabled = !enabled
-		if tail:
-			tail.enabled = enabled
-		if enabled:
-			# make sure our physics process is on
-			set_physics_process(true)
+## Movement provider order
+@export var order : int = 10
+
+## Use smooth rotation (may cause motion sickness)
+@export var smooth_rotation : bool = false
+
+## Smooth turn speed in radians per second
+@export var smooth_turn_speed : float = 2.0
+
+## Seconds per step (at maximum turn rate)
+@export var step_turn_delay : float = 0.2
+
+## Step turn angle in degrees
+@export var step_turn_angle : float = 20.0
+
+## Movement speed
+@export var max_speed : float = 10.0
+
+## Type of movement to perform
+@export var move_type : MOVEMENT_TYPE = MOVEMENT_TYPE.MOVE_AND_ROTATE
+
+## Can Fly flag
+@export var canFly : bool = true
+
+## Flight movement button (moves in controller direction if flight active)
+@export var fly_move_button_action = "trigger_click"
+
+## Flight activate button
+@export var fly_activate_button_action = "grip_click"
+
+## Our directional input
+@export var input_action = "primary"
+
+# Turn step accumulator
+var _turn_step := 0.0
+
+# Controller node
+@onready var _controller : XRController3D = get_parent()
+
+# Perform jump movement
+func physics_movement(delta: float, player_body: PlayerBody):
+	# Skip if the controller isn't active
+	if !_controller.get_is_active():
+		return
+
+	# Handle rotation
+	if move_type == MOVEMENT_TYPE.MOVE_AND_ROTATE:
+		_perform_player_rotation(delta, player_body)
+
+	# Detect flying
+	if canFly and _controller.is_button_pressed(fly_activate_button_action):
+		if _controller.is_button_pressed(fly_move_button_action):
+			# Use the controller's transform to move the VR capsule follow its orientation
+			var curr_transform := player_body.kinematic_node.global_transform
+			var fly_velocity := -_controller.global_transform.basis.z.normalized() * max_speed * XRServer.world_scale
+			player_body.velocity = player_body.move_and_slide(fly_velocity)
 		else:
-			# we turn this off in physics process just in case we want to do some cleanup
-			pass
+			player_body.velocity = Vector3.ZERO
 
-# We don't know the name of the camera node...
-@export var camera: NodePath = NodePath()
+		# Report exclusive motion performed (to bypass gravity)
+		return true
 
-# size of our player
-@export var player_radius = 0.4:
-	set(new_value):
-		player_radius = new_value
+	# Apply forwards/backwards ground control
+	player_body.ground_control_velocity.y += _controller.get_axis(input_action).y * max_speed
 
-# to combat motion sickness we'll 'step' our left/right turning
-@export var smooth_rotation = false
-@export var smooth_turn_speed = 2.0
-@export var step_turn_delay = 0.2
-@export var step_turn_angle = 20.0
+	# Apply left/right ground control
+	if move_type == MOVEMENT_TYPE.MOVE_AND_STRAFE:
+		player_body.ground_control_velocity.x += _controller.get_axis(input_action).x * max_speed
 
-# and movement
-@export var move_input: String = "primary"
-@export var max_speed = 10.0
-@export var drag_factor = 0.1
+	# Clamp ground control
+	player_body.ground_control_velocity.x = clamp(player_body.ground_control_velocity.x, -max_speed, max_speed)
+	player_body.ground_control_velocity.y = clamp(player_body.ground_control_velocity.y, -max_speed, max_speed)
 
-# fly mode and strafe movement management
-# @export var move_type: MOVEMENT_TYPE = MOVEMENT_TYPE.MOVE_AND_ROTATE # temporarily disabled, enums broke
-@export var move_type: int = 0
-@export var fly_enabled = true
-@export var fly_move: String = "trigger_click"
-@export var fly_activate: String = "grip_click"
-var isflying = false
+# Perform rotation based on the players rotation controller input
+func _perform_player_rotation(delta: float, player_body: PlayerBody):
+	var left_right := _controller.get_axis(input_action).x
+	
+	if abs(left_right) <= 0.1:
+		# Not turning
+		_turn_step = 0.0
+		return
 
-var turn_step = 0.0
-var origin_node = null
-var camera_node = null
-var velocity = Vector3(0.0, 0.0, 0.0)
-var gravity = -9.8
-@onready var collision_shape: CollisionShape3D = get_node("CharacterBody3D/CollisionShape3D")
-@onready var tail: RayCast3D = get_node("CharacterBody3D/Tail")
+	# Handle smooth rotation		
+	if smooth_rotation:
+		_rotate_player(player_body, smooth_turn_speed * delta * left_right)
+		return
 
-# Set our collision layer
-@export_flags_3d_physics var collision_layer = 1:
-	set(new_value):
-		collision_layer = new_value
-		_update_collision_layer()
+	# Clear step accumulator on direction change (opposite signs)
+	if left_right * _turn_step < 0.0:
+		_turn_step = 0.0
 
-# Set our collision mask
-@export_flags_3d_physics var collision_mask = 1022:
-	set(new_value):
-		collision_mask = new_value
-		_update_collision_mask()
+	# Integrate the control into the step accumulator
+	_turn_step += left_right * delta
 
-func _update_collision_layer():
-	if $CharacterBody3D:
-		$CharacterBody3D.collision_layer = collision_layer
+	# Calculate how many steps to perform (if any)
+	var steps := int(_turn_step / step_turn_delay)
+	if steps != 0:
+		# Apply the rotation
+		var step_angle = steps * step_turn_angle
+		_rotate_player(player_body, step_angle * PI / 180.0)
 
-func _update_collision_mask():
-	if $CharacterBody3D:
-		$CharacterBody3D.collision_mask = collision_mask
-		$CharacterBody3D/Tail.collision_mask = collision_mask
+		# Subtract the rotation from the accumulator
+		_turn_step -= step_angle
 
+# Rotate the origin node around the camera
+func _rotate_player(player_body: PlayerBody, angle: float):
+	var t1 := Transform3D()
+	var t2 := Transform3D()
+	var rot := Transform3D()
+
+	t1.origin = -player_body.camera_node.transform.origin
+	t2.origin = player_body.camera_node.transform.origin
+	rot = rot.rotated(Vector3(0.0, -1.0, 0.0), angle)
+	player_body.origin_node.transform = (player_body.origin_node.transform * t2 * rot * t1).orthonormalized()
+
+# This method verifies the MovementProvider has a valid configuration.
+func _get_configuration_warning():
+	# Check the controller node
+	var test_controller = get_parent()
+	if !test_controller or !test_controller is XRController3D:
+		return "Unable to find XR Controller node"
+
+	# Call base class
+	return super._get_configuration_warning()
 
 func _ready():
-	# origin node should always be the parent of our parent
-	origin_node = get_node("../..")
-
-	if camera:
-		camera_node = get_node(camera)
-	else:
-		# see if we can find our default
-		camera_node = origin_node.get_node('XRCamera')
-
-	# Our properties are set before our children are constructed so just re-issue
-	_update_collision_layer()
-	_update_collision_mask()
-
-	collision_shape.disabled = !enabled
-	tail.enabled = enabled
-
-func _physics_process(delta):
-	if !origin_node:
-		return
-
-	if !camera_node:
-		return
-
-	if !enabled:
-		set_physics_process(false)
-		return
-
-	# Adjust the height of our player according to our camera position
-	var player_height = camera_node.transform.origin.y + player_radius
-	if player_height < player_radius:
-		# not smaller than this
-		player_height = player_radius
-
-	collision_shape.shape.radius = player_radius
-	collision_shape.shape.height = player_height
-	collision_shape.transform.origin.y = (player_height / 2.0)
-
-	# We should be the child or the controller on which the teleport is implemented
-	var controller = get_parent()
-	if controller.get_is_active():
-		var input = controller.get_axis(move_input)
-		var left_right = input.x
-		var forwards_backwards = input.y
-
-		# if fly_action_button_id is pressed it activates the FLY MODE
-		# if fly_action_button_id is released it deactivates the FLY MODE
-		if controller.is_button_pressed(fly_activate) && fly_enabled:
-			isflying =  true
-		else:
-			isflying = false
-
-		# if player is flying, he moves following the controller's orientation
-		if isflying:
-			if controller.is_button_pressed(fly_move):
-				# is flying, so we will use the controller's transform to move the VR capsule follow its orientation
-				var curr_transform = $CharacterBody3D.global_transform
-				$CharacterBody3D.motion_velocity = -controller.global_transform.basis.z.normalized() * max_speed * XRServer.world_scale
-				$CharacterBody3D.move_and_slide()
-				velocity = $CharacterBody3D.motion_velocity
-				var movement = ($CharacterBody3D.global_transform.origin - curr_transform.origin)
-				origin_node.global_transform.origin += movement
-
-		################################################################
-		# first process turning, no problems there :)
-		# move_type == MOVEMENT_TYPE.move_and_strafe
-		else:
-			if(abs(left_right) > 0.1): # move_type == MOVEMENT_TYPE.MOVE_AND_ROTATE && 
-				if smooth_rotation:
-					# we rotate around our Camera, but we adjust our origin, so we need a little bit of trickery
-					var t1 : Transform3D = Transform3D()
-					var t2 : Transform3D = Transform3D()
-					var rot : Transform3D = Transform3D()
-
-					t1.origin = -camera_node.transform.origin
-					t2.origin = camera_node.transform.origin
-					rot = rot.rotated(Vector3(0.0, -1.0, 0.0), smooth_turn_speed * delta * left_right)
-					origin_node.transform = (origin_node.transform * t2 * rot * t1).orthonormalized()
-
-					# reset turn step, doesn't apply
-					turn_step = 0.0
-				else:
-					if left_right > 0.0:
-						if turn_step < 0.0:
-							# reset step
-							turn_step = 0
-
-						turn_step += left_right * delta
-					else:
-						if turn_step > 0.0:
-							# reset step
-							turn_step = 0
-
-						turn_step += left_right * delta
-
-					if abs(turn_step) > step_turn_delay:
-						# we rotate around our Camera, but we adjust our origin, so we need a little bit of trickery
-						var t1 = Transform3D()
-						var t2 = Transform3D()
-						var rot = Transform3D()
-
-						t1.origin = -camera_node.transform.origin
-						t2.origin = camera_node.transform.origin
-
-						# Rotating
-						while abs(turn_step) > step_turn_delay:
-							if (turn_step > 0.0):
-								rot = rot.rotated(Vector3(0.0, -1.0, 0.0), step_turn_angle * PI / 180.0)
-								turn_step -= step_turn_delay
-							else:
-								rot = rot.rotated(Vector3(0.0, 1.0, 0.0), step_turn_angle * PI / 180.0)
-								turn_step += step_turn_delay
-
-						origin_node.transform *= t2 * rot * t1
-			else:
-				# reset turn step, no longer turning
-				turn_step = 0.0
-
-			################################################################
-			# now we do our movement
-			# We start with placing our CharacterBody3D in the right place
-			# by centering it on the camera but placing it on the ground
-			var curr_transform = $CharacterBody3D.global_transform
-			var camera_transform = camera_node.global_transform
-			curr_transform.origin = camera_transform.origin
-			curr_transform.origin.y = origin_node.global_transform.origin.y
-
-			# now we move it slightly back
-			var forward_dir = -camera_transform.basis.z
-			forward_dir.y = 0.0
-			if forward_dir.length() > 0.01:
-				curr_transform.origin += forward_dir.normalized() * -0.75 * player_radius
-
-			$CharacterBody3D.global_transform = curr_transform
-
-			# we'll handle gravity separately
-			var gravity_velocity = Vector3(0.0, velocity.y, 0.0)
-			velocity.y = 0.0
-
-			# Apply our drag
-			velocity *= (1.0 - drag_factor)
-
-			if move_type == 0: ## 0 = MOVEMENT_TYPE.MOVE_AND_ROTATE
-				if (abs(forwards_backwards) > 0.1 and tail.is_colliding()):
-					var dir = camera_transform.basis.z
-					dir.y = 0.0
-					velocity = dir.normalized() * -forwards_backwards * max_speed * XRServer.world_scale
-					#velocity = velocity.linear_interpolate(dir, delta * 100.0)
-			elif move_type == 1: ## 1 = MOVEMENT_TYPE.MOVE_AND_STRAFE
-				if ((abs(forwards_backwards) > 0.1 ||  abs(left_right) > 0.1) and tail.is_colliding()):
-					var dir_forward = camera_transform.basis.z
-					dir_forward.y = 0.0
-					# VR Capsule will strafe left and right
-					var dir_right = camera_transform.basis.x;
-					dir_right.y = 0.0
-					velocity = (dir_forward * -forwards_backwards + dir_right * left_right).normalized() * max_speed * XRServer.world_scale
-
-			# apply move and slide to our kinematic body
-			$CharacterBody3D.motion_velocity = velocity
-			$CharacterBody3D.move_and_slide()
-			velocity = $CharacterBody3D.motion_velocity
-
-			# apply our gravity
-			gravity_velocity.y += 0.5 * gravity * delta
-			$CharacterBody3D.motion_velocity = gravity_velocity
-			$CharacterBody3D.move_and_slide()
-			gravity_velocity = $CharacterBody3D.motion_velocity
-			velocity.y = gravity_velocity.y
-
-			# now use our new position to move our origin point
-			var movement = ($CharacterBody3D.global_transform.origin - curr_transform.origin)
-			origin_node.global_transform.origin += movement
-
-			# Return this back to where it was so we can use its collision shape for other things too
-			# $CharacterBody3D.global_transform.origin = curr_transform.origin
+	# Workaround for issue #52223, our onready var is preventing ready from being called on the super class
+	super()

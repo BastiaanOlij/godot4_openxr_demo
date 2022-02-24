@@ -1,5 +1,25 @@
 # 3.0
-- Ported XR tools to Godot 4
+- Port to Godot 4
+
+# 2.4.0
+- 
+
+# 2.3.0
+- Added vignette
+- Moved player physics into new PlayerBody asset (breaking change)
+- Moved Function_Direct_movement settings for player physics into PlayerBody
+- Added Function_Glide_movement to allow the player to glide
+- Added Function_Jump_movement to allow the player to jump
+- Added Function_Climb_movement to allow the player to climb
+- Redid the setup of the hands to make it easier to extend to other gestures
+- Improved pickup and throwing logic
+
+# 2.2
+- Changed default physics layers to make more sense (minor breaking change)
+- Replaced Center On Node property with PickupCenter node you can place
+- Made Object_pickable script work by itself and registers as class `XRToolsPickable`
+- New Object_interactable convenience script that registers as class `XRToolsInteractable` that reacts to our pointer function
+- Removed ducktype switch from pointer, pointer will use signals over ducktyping automatically (minor breaking change)
 
 # 2.1
 - added option to highlight object that can be picked up

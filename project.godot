@@ -8,6 +8,112 @@
 
 config_version=5
 
+_global_script_classes=[{
+"base": "MovementProvider",
+"class": &"Function_ClimbMovement",
+"language": &"GDScript",
+"path": "res://addons/godot-xr-tools/functions/Function_Climb_movement.gd"
+}, {
+"base": "MovementProvider",
+"class": &"Function_DirectMovement",
+"language": &"GDScript",
+"path": "res://addons/godot-xr-tools/functions/Function_Direct_movement.gd"
+}, {
+"base": "MovementProvider",
+"class": &"Function_Glide",
+"language": &"GDScript",
+"path": "res://addons/godot-xr-tools/functions/Function_Glide_movement.gd"
+}, {
+"base": "MovementProvider",
+"class": &"Function_Jump",
+"language": &"GDScript",
+"path": "res://addons/godot-xr-tools/functions/Function_Jump_movement.gd"
+}, {
+"base": "Area3D",
+"class": &"Function_Pickup",
+"language": &"GDScript",
+"path": "res://addons/godot-xr-tools/functions/Function_Pickup.gd"
+}, {
+"base": "MovementProvider",
+"class": &"Function_WindMovement",
+"language": &"GDScript",
+"path": "res://addons/godot-xr-tools/functions/Function_Wind_movement.gd"
+}, {
+"base": "Node",
+"class": &"GroundPhysics",
+"language": &"GDScript",
+"path": "res://addons/godot-xr-tools/overrides/GroundPhysics.gd"
+}, {
+"base": "Resource",
+"class": &"GroundPhysicsSettings",
+"language": &"GDScript",
+"path": "res://addons/godot-xr-tools/overrides/GroundPhysicsSettings.gd"
+}, {
+"base": "Node",
+"class": &"MovementProvider",
+"language": &"GDScript",
+"path": "res://addons/godot-xr-tools/functions/MovementProvider.gd"
+}, {
+"base": "Node3D",
+"class": &"Object_climbable",
+"language": &"GDScript",
+"path": "res://addons/godot-xr-tools/objects/Object_climbable.gd"
+}, {
+"base": "Node",
+"class": &"PlayerBody",
+"language": &"GDScript",
+"path": "res://addons/godot-xr-tools/assets/PlayerBody.gd"
+}, {
+"base": "RefCounted",
+"class": &"VelocityAverager",
+"language": &"GDScript",
+"path": "res://addons/godot-xr-tools/misc/Velocity_Averager.gd"
+}, {
+"base": "RefCounted",
+"class": &"VelocityAveragerLinear",
+"language": &"GDScript",
+"path": "res://addons/godot-xr-tools/misc/Velocity_Averager_Linear.gd"
+}, {
+"base": "Area3D",
+"class": &"WindArea",
+"language": &"GDScript",
+"path": "res://addons/godot-xr-tools/objects/Wind_area.gd"
+}, {
+"base": "Area3D",
+"class": &"XRToolsInteractableArea",
+"language": &"GDScript",
+"path": "res://addons/godot-xr-tools/objects/Interactable_area.gd"
+}, {
+"base": "Node3D",
+"class": &"XRToolsInteractableBody",
+"language": &"GDScript",
+"path": "res://addons/godot-xr-tools/objects/Interactable_body.gd"
+}, {
+"base": "RigidDynamicBody3D",
+"class": &"XRToolsPickable",
+"language": &"GDScript",
+"path": "res://addons/godot-xr-tools/objects/Object_pickable.gd"
+}]
+_global_script_class_icons={
+"Function_ClimbMovement": "",
+"Function_DirectMovement": "",
+"Function_Glide": "",
+"Function_Jump": "",
+"Function_Pickup": "",
+"Function_WindMovement": "",
+"GroundPhysics": "",
+"GroundPhysicsSettings": "",
+"MovementProvider": "",
+"Object_climbable": "",
+"PlayerBody": "",
+"VelocityAverager": "",
+"VelocityAveragerLinear": "",
+"WindArea": "",
+"XRToolsInteractableArea": "",
+"XRToolsInteractableBody": "",
+"XRToolsPickable": ""
+}
+
 [application]
 
 config/name="OpenXRCore4"
@@ -22,6 +128,10 @@ settings/stdout/print_fps=true
 [display]
 
 window/vsync/vsync_mode=0
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot-xr-tools/plugin.cfg")
 
 [rendering]
 

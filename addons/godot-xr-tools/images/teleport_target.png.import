@@ -2,7 +2,7 @@
 
 importer="texture"
 type="StreamTexture2D"
-uid="uid://wr0d2f1u0edo"
+uid="uid://cu4j1s8qr1rjq"
 path.s3tc="res://.godot/imported/teleport_target.png-cd812f7d5692711ac91f6c8a4753ad73.s3tc.stex"
 path.etc2="res://.godot/imported/teleport_target.png-cd812f7d5692711ac91f6c8a4753ad73.etc2.stex"
 metadata={
@@ -31,6 +31,6 @@ roughness/src_normal=""
 process/fix_alpha_border=true
 process/premult_alpha=false
 process/normal_map_invert_y=false
-process/HDR_as_SRGB=false
+process/hdr_as_srgb=false
 process/size_limit=0
 detect_3d/compress_to=0
