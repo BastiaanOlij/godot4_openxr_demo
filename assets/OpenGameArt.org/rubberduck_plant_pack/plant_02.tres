@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://1s0vitcr00ra"]
+
+[ext_resource type="Texture2D" uid="uid://cghl8xadgqoy8" path="res://assets/OpenGameArt.org/rubberduck_plant_pack/plant_02.png" id="1_ap0m6"]
+
+[resource]
+resource_name = "plant_02"
+transparency = 1
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource( "1_ap0m6" )
+metallic = 1.0

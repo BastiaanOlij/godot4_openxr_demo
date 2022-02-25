@@ -1,0 +1,95 @@
+[remap]
+
+importer="scene"
+importer_version=1
+type="PackedScene"
+uid="uid://jg8vl8fo1ndw"
+path="res://.godot/imported/plant-pack-1.glb-ae0fc25c7cd038c06789d187eac1792e.scn"
+
+[deps]
+
+source_file="res://assets/OpenGameArt.org/rubberduck_plant_pack/plant-pack-1.glb"
+dest_files=["res://.godot/imported/plant-pack-1.glb-ae0fc25c7cd038c06789d187eac1792e.scn"]
+
+[params]
+
+nodes/root_type="Node3D"
+nodes/root_name="Scene Root"
+nodes/root_scale=1.0
+meshes/ensure_tangents=true
+meshes/generate_lods=true
+meshes/create_shadow_meshes=true
+meshes/light_baking=1
+meshes/lightmap_texel_size=0.1
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+import_script/path=""
+_subresources={
+"materials": {
+"Emit": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/OpenGameArt.org/rubberduck_plant_pack/Emit.tres"
+},
+"Emit2": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/OpenGameArt.org/rubberduck_plant_pack/Emit2.tres"
+},
+"bush_01": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/OpenGameArt.org/rubberduck_plant_pack/bush_01.tres"
+},
+"bush_02": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/OpenGameArt.org/rubberduck_plant_pack/bush_02.tres"
+},
+"bush_03": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/OpenGameArt.org/rubberduck_plant_pack/bush_03.tres"
+},
+"bush_04": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/OpenGameArt.org/rubberduck_plant_pack/bush_04.tres"
+},
+"fern_01": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/OpenGameArt.org/rubberduck_plant_pack/fern_01.tres"
+},
+"flower_01": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/OpenGameArt.org/rubberduck_plant_pack/flower_01.tres"
+},
+"flower_02": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/OpenGameArt.org/rubberduck_plant_pack/flower_02.tres"
+},
+"flower_02_top": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/OpenGameArt.org/rubberduck_plant_pack/flower_02_top.tres"
+},
+"flower_03": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/OpenGameArt.org/rubberduck_plant_pack/flower_03.tres"
+},
+"flower_bush_01": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/OpenGameArt.org/rubberduck_plant_pack/flower_bush_01.tres"
+},
+"grasses_01": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/OpenGameArt.org/rubberduck_plant_pack/grasses_01.tres"
+},
+"plant_01": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/OpenGameArt.org/rubberduck_plant_pack/plant_01.tres"
+},
+"plant_02": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/OpenGameArt.org/rubberduck_plant_pack/plant_02.tres"
+},
+"shrubs_tall_01": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/OpenGameArt.org/rubberduck_plant_pack/shrubs_tall_01.tres"
+}
+}
+}
