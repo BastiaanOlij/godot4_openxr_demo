@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://c7mq5w60bchs0"]
+
+[ext_resource type="PackedScene" uid="uid://bke13y3ndyo3b" path="res://assets/misc/ladder.tscn" id="1_1b3ml"]
+
+[node name="MonkeyBars" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Ladder01" parent="." instance=ExtResource( "1_1b3ml" )]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Ladder02" parent="." instance=ExtResource( "1_1b3ml" )]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="Ladder03" parent="." instance=ExtResource( "1_1b3ml" )]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 3.9, 0)
+
+[node name="Ladder04" parent="." instance=ExtResource( "1_1b3ml" )]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 3.9, -4)

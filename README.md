@@ -7,3 +7,5 @@ Use in combination with https://github.com/godotengine/godot/pull/56394
 ## License
 
 This project is provided under the MIT license
+
+Check license files in the asset and addons folders for 3rd party licenses.

@@ -1,0 +1,74 @@
+[gd_scene load_steps=8 format=3 uid="uid://80ticblpovme"]
+
+[ext_resource type="PackedScene" path="res://addons/godot-xr-tools/objects/Object_pickable.tscn" id="1_7vqni"]
+[ext_resource type="Script" path="res://assets/sketchfab.com/basketball/basketball.gd" id="2_6qx3j"]
+[ext_resource type="PackedScene" uid="uid://beketqaubosqr" path="res://assets/sketchfab.com/basketball/scene.gltf" id="2_hjyfe"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vmyfy"]
+bounce = 0.61
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_muwor"]
+radius = 0.125
+
+[sub_resource type="Animation" id="Animation_3vemx"]
+resource_name = "Lifetime"
+length = 5.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("scene:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3.5, 3.6, 4, 4.1, 4.4, 4.5, 4.7, 4.8, 4.9, 5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [true, false, true, false, true, false, true, false, true, false, true]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_reset"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_t1u6m"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("scene:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [true]
+}
+
+[node name="Basketball" instance=ExtResource( "1_7vqni" )]
+mass = 0.5
+physics_material_override = SubResource( "PhysicsMaterial_vmyfy" )
+script = ExtResource( "2_6qx3j" )
+highlight_mesh_instance = NodePath("scene/RootNode (gltf orientation matrix)/RootNode (model correction matrix)/Root/PolySphere001/PolySphere001_0")
+
+[node name="CollisionShape3D" parent="." index="1"]
+shape = SubResource( "SphereShape3D_muwor" )
+
+[node name="scene" parent="." index="2" instance=ExtResource( "2_hjyfe" )]
+transform = Transform3D(0.125, 0, 0, 0, 0.125, 0, 0, 0, 0.125, 0, 0, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="3"]
+anims/Lifetime = SubResource( "Animation_3vemx" )
+anims/RESET = SubResource( "Animation_t1u6m" )
+
+[editable path="scene"]

@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://m3nphcmkitrp"]
+
+[ext_resource type="Texture2D" uid="uid://bv7wkfqjtkcfp" path="res://assets/OpenGameArt.org/rubberduck_plant_pack/shrubs_tall_01.png" id="1_wpg4p"]
+
+[resource]
+resource_name = "shrubs_tall_01"
+transparency = 1
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource( "1_wpg4p" )
+metallic = 1.0
