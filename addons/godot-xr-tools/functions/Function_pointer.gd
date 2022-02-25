@@ -104,7 +104,7 @@ func _on_button_pressed(p_button):
 	if p_button == active_button_action and enabled:
 		_button_pressed()
 
-func _on_button_release(p_button):
+func _on_button_released(p_button):
 	if p_button == active_button_action and target:
 		_button_released()
 
@@ -117,7 +117,7 @@ func _ready():
 
 	# Get button press feedback from our parent (should be an XRController3D)
 	get_parent().connect("button_pressed", _on_button_pressed)
-	get_parent().connect("button_release", _on_button_release)
+	get_parent().connect("button_released", _on_button_released)
 	
 	# init our state
 	_update_y_offset()

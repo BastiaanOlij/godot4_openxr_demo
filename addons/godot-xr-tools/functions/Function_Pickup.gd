@@ -93,7 +93,7 @@ func _on_button_pressed(p_button):
 		if is_instance_valid(picked_up_object) and picked_up_object.has_method("action"):
 			picked_up_object.action()
 
-func _on_button_release(p_button):
+func _on_button_released(p_button):
 	if p_button == pickup_button_action:
 		if is_instance_valid(picked_up_object) and picked_up_object.press_to_hold:
 			drop_object()
@@ -104,7 +104,7 @@ func _ready():
 		return
 
 	get_parent().connect("button_pressed", _on_button_pressed)
-	get_parent().connect("button_release", _on_button_release)
+	get_parent().connect("button_released", _on_button_released)
 
 	_update_pickup_range()
 
