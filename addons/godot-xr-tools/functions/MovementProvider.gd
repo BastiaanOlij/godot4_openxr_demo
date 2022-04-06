@@ -2,6 +2,7 @@
 class_name MovementProvider
 extends Node
 
+
 ##
 ## Movement Provider base class
 ##
@@ -15,25 +16,21 @@ extends Node
 ##      - Override the physics_movement method to impelment motion
 ##
 
+
 ## Enable movement provider
 @export var enabled : bool = true
 
-# Get our origin node, we should be in a branch of this
-func get_xr_origin() -> XROrigin3D:
-	var parent = get_parent()
-	while parent:
-		if parent is XROrigin3D:
-			return parent
-		parent = parent.get_parent()
-	
-	return null
+
+# Is the movement provider actively performing a move
+var is_active := false
+
 
 ## Note, using PlayerBody here creates a cyclic dependency so we are going for duck typing :)
 
 # Get our player body, this should be a node on our XROrigin3D node.
 func get_player_body() -> Node:
 	# get our origin node
-	var xr_origin = get_xr_origin()
+	var xr_origin := XRHelpers.get_xr_origin(self)
 	if !xr_origin:
 		return null
 
@@ -48,10 +45,11 @@ func get_player_body() -> Node:
 
 	return null
 
-# If missing we need to add our player body 
+
+# If missing we need to add our player body
 func _create_player_body_node():
 	# get our origin node
-	var xr_origin = get_xr_origin()
+	var xr_origin = XRHelpers.get_xr_origin(self)
 	if !xr_origin:
 		return
 
@@ -63,25 +61,29 @@ func _create_player_body_node():
 		player_body = player_body.instantiate()
 		player_body.set_name("PlayerBody")
 		xr_origin.add_child(player_body)
-		player_body.set_owner(xr_origin.owner)
+		player_body.set_owner(get_tree().get_edited_scene_root())
+
 
 # Function run when node is added to scene
 func _ready():
-	# If we're in the editor, help the user out by creating our player body node automatically when needed.
+	# If we're in the editor, help the user out by creating our player body node
+	# automatically when needed.
 	if Engine.is_editor_hint():
 		var player_body = get_player_body()
 		if !player_body:
 			# This call needs to be deferred, we can't add nodes during scene construction
 			call_deferred("_create_player_body_node")
 
+
 # Override this function to apply motion to the PlayerBody
-func physics_movement(delta: float, player_body: PlayerBody):
+func physics_movement(_delta: float, _player_body: PlayerBody):
 	pass
+
 
 # This method verifies the MovementProvider has a valid configuration.
 func _get_configuration_warning():
 	# Verify we're within the tree of an XROrigin3D node
-	var xr_origin = get_xr_origin()
+	var xr_origin = XRHelpers.get_xr_origin(self)
 	if !xr_origin:
 		return "This node must be within a branch on an XROrigin3D node"
 

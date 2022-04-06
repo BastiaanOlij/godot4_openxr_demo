@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
+type="CompressedTexture2D"
 uid="uid://620m8uflaqea"
-path="res://.godot/imported/Concrete025_1K_Roughness.jpg-3e874852312dc179ddcd83393f52e450.stex"
+path="res://.godot/imported/Concrete025_1K_Roughness.jpg-3e874852312dc179ddcd83393f52e450.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://assets/ambientCG.com/Concrete025/Concrete025_1K_Roughness.jpg"
-dest_files=["res://.godot/imported/Concrete025_1K_Roughness.jpg-3e874852312dc179ddcd83393f52e450.stex"]
+dest_files=["res://.godot/imported/Concrete025_1K_Roughness.jpg-3e874852312dc179ddcd83393f52e450.ctex"]
 
 [params]
 

@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
+type="CompressedTexture2D"
 uid="uid://c5k6asv6p2qii"
-path="res://.godot/imported/Concrete025_1K_NormalGL.jpg-1f930a3c0cb0fe4d1bcaeaaf6deb4604.stex"
+path="res://.godot/imported/Concrete025_1K_NormalGL.jpg-1f930a3c0cb0fe4d1bcaeaaf6deb4604.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://assets/ambientCG.com/Concrete025/Concrete025_1K_NormalGL.jpg"
-dest_files=["res://.godot/imported/Concrete025_1K_NormalGL.jpg-1f930a3c0cb0fe4d1bcaeaaf6deb4604.stex"]
+dest_files=["res://.godot/imported/Concrete025_1K_NormalGL.jpg-1f930a3c0cb0fe4d1bcaeaaf6deb4604.ctex"]
 
 [params]
 

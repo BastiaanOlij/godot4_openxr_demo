@@ -1,10 +1,10 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
+type="CompressedTexture2D"
 uid="uid://dcv08emh302ek"
-path.s3tc="res://.godot/imported/flower_03.png-020cf2d511c768dd7c356ee855729338.s3tc.stex"
-path.etc2="res://.godot/imported/flower_03.png-020cf2d511c768dd7c356ee855729338.etc2.stex"
+path.s3tc="res://.godot/imported/flower_03.png-020cf2d511c768dd7c356ee855729338.s3tc.ctex"
+path.etc2="res://.godot/imported/flower_03.png-020cf2d511c768dd7c356ee855729338.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc", "etc2"],
 "vram_texture": true
@@ -13,7 +13,7 @@ metadata={
 [deps]
 
 source_file="res://assets/OpenGameArt.org/rubberduck_plant_pack/flower_03.png"
-dest_files=["res://.godot/imported/flower_03.png-020cf2d511c768dd7c356ee855729338.s3tc.stex", "res://.godot/imported/flower_03.png-020cf2d511c768dd7c356ee855729338.etc2.stex"]
+dest_files=["res://.godot/imported/flower_03.png-020cf2d511c768dd7c356ee855729338.s3tc.ctex", "res://.godot/imported/flower_03.png-020cf2d511c768dd7c356ee855729338.etc2.ctex"]
 
 [params]
 

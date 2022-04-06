@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
+type="CompressedTexture2D"
 uid="uid://gwavxjfw72dr"
-path="res://.godot/imported/flower_02_top_norm.jpg-f264dbe3842647ef76ae10f8252cf034.stex"
+path="res://.godot/imported/flower_02_top_norm.jpg-f264dbe3842647ef76ae10f8252cf034.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://assets/OpenGameArt.org/rubberduck_plant_pack/flower_02_top_norm.jpg"
-dest_files=["res://.godot/imported/flower_02_top_norm.jpg-f264dbe3842647ef76ae10f8252cf034.stex"]
+dest_files=["res://.godot/imported/flower_02_top_norm.jpg-f264dbe3842647ef76ae10f8252cf034.ctex"]
 
 [params]
 

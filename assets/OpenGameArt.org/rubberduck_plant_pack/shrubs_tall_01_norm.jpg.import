@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
+type="CompressedTexture2D"
 uid="uid://eq3o24dnqnnq"
-path="res://.godot/imported/shrubs_tall_01_norm.jpg-d0b2c586ee87fdd681e6b23a922c97ae.stex"
+path="res://.godot/imported/shrubs_tall_01_norm.jpg-d0b2c586ee87fdd681e6b23a922c97ae.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://assets/OpenGameArt.org/rubberduck_plant_pack/shrubs_tall_01_norm.jpg"
-dest_files=["res://.godot/imported/shrubs_tall_01_norm.jpg-d0b2c586ee87fdd681e6b23a922c97ae.stex"]
+dest_files=["res://.godot/imported/shrubs_tall_01_norm.jpg-d0b2c586ee87fdd681e6b23a922c97ae.ctex"]
 
 [params]
 

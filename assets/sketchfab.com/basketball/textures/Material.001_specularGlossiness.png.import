@@ -1,10 +1,10 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
+type="CompressedTexture2D"
 uid="uid://rtw42fs01677"
-path.s3tc="res://.godot/imported/Material.001_specularGlossiness.png-7b41b5035f0d0b105a8356d6e09800bb.s3tc.stex"
-path.etc2="res://.godot/imported/Material.001_specularGlossiness.png-7b41b5035f0d0b105a8356d6e09800bb.etc2.stex"
+path.s3tc="res://.godot/imported/Material.001_specularGlossiness.png-7b41b5035f0d0b105a8356d6e09800bb.s3tc.ctex"
+path.etc2="res://.godot/imported/Material.001_specularGlossiness.png-7b41b5035f0d0b105a8356d6e09800bb.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc", "etc2"],
 "vram_texture": true
@@ -13,7 +13,7 @@ metadata={
 [deps]
 
 source_file="res://assets/sketchfab.com/basketball/textures/Material.001_specularGlossiness.png"
-dest_files=["res://.godot/imported/Material.001_specularGlossiness.png-7b41b5035f0d0b105a8356d6e09800bb.s3tc.stex", "res://.godot/imported/Material.001_specularGlossiness.png-7b41b5035f0d0b105a8356d6e09800bb.etc2.stex"]
+dest_files=["res://.godot/imported/Material.001_specularGlossiness.png-7b41b5035f0d0b105a8356d6e09800bb.s3tc.ctex", "res://.godot/imported/Material.001_specularGlossiness.png-7b41b5035f0d0b105a8356d6e09800bb.etc2.ctex"]
 
 [params]
 

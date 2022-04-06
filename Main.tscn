@@ -14,7 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://bi56aarct11p6" path="res://assets/ambientCG.com/Grass004/Grass004_1K_Roughness.jpg" id="12_mutam"]
 [ext_resource type="PackedScene" uid="uid://c7mq5w60bchs0" path="res://scenes/MonkeyBars.tscn" id="13_y2500"]
 [ext_resource type="PackedScene" uid="uid://cws1pq5a3toqm" path="res://scenes/BasketballCourt.tscn" id="14_oj3na"]
-[ext_resource type="PackedScene" uid="uid://jg8vl8fo1ndw" path="res://assets/OpenGameArt.org/rubberduck_plant_pack/plant-pack-1.glb" id="15_54hft"]
+[ext_resource type="PackedScene" uid="uid://dxc6qwbxhsnwu" path="res://assets/OpenGameArt.org/rubberduck_plant_pack/plant-pack-1.glb" id="15_54hft"]
 [ext_resource type="Material" uid="uid://dinbn0e5nxxv2" path="res://assets/OpenGameArt.org/rubberduck_plant_pack/flower_01.tres" id="16_k0xyq"]
 [ext_resource type="Material" uid="uid://2y2kglyj5xye" path="res://assets/OpenGameArt.org/rubberduck_plant_pack/plant_01.tres" id="17_jimiv"]
 [ext_resource type="Material" uid="uid://bjon62ek345r1" path="res://assets/OpenGameArt.org/rubberduck_plant_pack/grasses_01.tres" id="18_imo6w"]
@@ -267,7 +267,6 @@ pose = &"aim"
 [node name="RightHand" parent="XROrigin3D/RightHand" instance=ExtResource( "4_mos32" )]
 
 [node name="Function_Direct_movement" parent="XROrigin3D/RightHand" instance=ExtResource( "2_g0m70" )]
-canFly = false
 
 [node name="Function_Pickup" parent="XROrigin3D/RightHand" instance=ExtResource( "5_5tsqm" )]
 impulse_factor = 1.5
@@ -283,8 +282,9 @@ right_pickup = NodePath("../RightHand/Function_Pickup")
 environment = SubResource( "Environment_v7gtd" )
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.821547, 0.247955, -0.513399, 0.189303, 0.730762, 0.655859, 0.537796, -0.636008, 0.553417, 0, 4.81216, 0)
+transform = Transform3D(0.734349, -0.548768, 0.399481, 0.189303, 0.730762, 0.65586, -0.65184, -0.406007, 0.640518, 0, 4.81216, 1.27972)
 light_energy = 2.0
+shadow_enabled = true
 
 [node name="Floor" type="StaticBody3D" parent="."]
 
