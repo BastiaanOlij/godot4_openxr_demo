@@ -20,21 +20,28 @@ extends Node
 ##     track any movement to the PlayerBody.
 ##
 
+
+## Signal emitted when the player jumps
+signal player_jumped()
+
+
+# Horizontal vector (multiply by this to get only the horizontal components
+const HORIZONTAL := Vector3(1.0, 0.0, 1.0)
+
+
 ## PlayerBody enabled flag
 @export var enabled = true:
 	set(new_value):
 		enabled = new_value
-
-		# Update collision_shape
-		if _collision_node:
-			_collision_node.disabled = !enabled
-
-		# Update physics processing
-		if enabled:
-			set_physics_process(true)
+		if is_inside_tree():
+			_update_enabled()
 
 ## Player radius
-@export var player_radius : float = 0.4
+@export var player_radius : float = 0.4:
+	set(new_value):
+		player_radius = new_value
+		if is_inside_tree():
+			_update_player_radius()
 
 ## Player camera to head top
 @export var player_cam_to_head_top : float = 0.1
@@ -55,23 +62,20 @@ extends Node
 		physics = new_value
 		default_physics = _guaranteed_physics()
 
-## Path to the XROrigin3D node
-@export_node_path(XROrigin3D) var origin
+# Set our collision layer
+@export_flags_3d_physics var collision_layer : int = 1 << 19:
+	set(new_value):
+		collision_layer = new_value
+		if is_inside_tree():
+			_update_collision_layer()
 
-## Path to the XRCamera3D node
-@export_node_path(XRCamera3D) var camera
+# Set our collision mask
+@export_flags_3d_physics var collision_mask : int = 1023:
+	set(new_value):
+		collision_mask = new_value
+		if is_inside_tree():
+			_update_collision_mask()
 
-## XROrigin3D node
-var origin_node: XROrigin3D
-
-## XRCamera3D node
-var camera_node: XRCamera3D
-
-## Player CharacterBody3D node
-@onready var kinematic_node: CharacterBody3D = $CharacterBody3D
-
-# Default physics (if not specified by the user or the current ground)
-@onready var default_physics = _guaranteed_physics()
 
 ## Player Velocity - modifiable by MovementProvider nodes
 var velocity := Vector3.ZERO
@@ -97,58 +101,62 @@ var ground_control_velocity := Vector2.ZERO
 # Movement providers
 var _movement_providers := Array()
 
+# Jump cool-down counter
+var _jump_cooldown := 0
+
+
+## XROrigin3D node
+@onready var origin_node: XROrigin3D = XRHelpers.get_xr_origin(self)
+
+## XRCamera3D node
+@onready var camera_node: XRCamera3D = XRHelpers.get_xr_camera(self)
+
+## Player CharacterBody3D node
+@onready var kinematic_node: CharacterBody3D = $CharacterBody3D
+
+# Default physics (if not specified by the user or the current ground)
+@onready var default_physics = _guaranteed_physics()
+
 # Collision node
 @onready var _collision_node: CollisionShape3D = $CharacterBody3D/CollisionShape3D
 
-# Horizontal vector (multiply by this to get only the horizontal components
-const horizontal := Vector3(1.0, 0.0, 1.0)
 
 # Function to sort movement providers by order
 func sort_by_order(a, b) -> bool:
 	return true if a.order < b.order else false
 
-# Get our origin node, make sure we have consistent code here
-func _get_origin_node() -> XROrigin3D:
-	var node : XROrigin3D = get_node_or_null(origin) if origin else get_parent()
-	return node
-
-# Get our camera node
-func _get_camera_node() -> XRCamera3D:
-	# if we have set a node, try and use it
-	var node : XRCamera3D
-	
-	if camera:
-		node = get_node_or_null(camera)
-		if node:
-			return node
-
-	var o : XROrigin3D = _get_origin_node()
-	if !o:
-		return null
-
-	# else get by default name 
-	node = o.get_node_or_null("XRCamera3D")
-	if node:
-		return node
-
-	# else find the first camera child
-	for child in o.get_children():
-		if child is XRCamera3D:
-			return child
-
-	# no luck
-	return null
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	# Get the origin and camera nodes
-	origin_node = _get_origin_node()
-	camera_node = _get_camera_node()
-
 	# Get the movement providers ordered by increasing order
 	_movement_providers = get_tree().get_nodes_in_group("movement_providers")
 	_movement_providers.sort_custom(sort_by_order)
 
+	# Propagate defaults
+	_update_enabled()
+	_update_player_radius()
+	_update_collision_layer()
+	_update_collision_mask()
+
+func _update_enabled() -> void:
+	# Update collision_shape
+	if _collision_node:
+		_collision_node.disabled = !enabled
+
+	# Update physics processing
+	if enabled:
+		set_physics_process(true)
+
+func _update_player_radius() -> void:
+	if _collision_node and _collision_node.shape:
+		_collision_node.shape.radius = player_radius
+
+func _update_collision_layer() -> void:
+	if kinematic_node:
+		kinematic_node.collision_layer = collision_layer
+
+func _update_collision_mask() -> void:
+	if kinematic_node:
+		kinematic_node.collision_mask = collision_mask
 
 func _physics_process(delta):
 	# Do not run physics if in the editor
@@ -159,6 +167,10 @@ func _physics_process(delta):
 	if !enabled:
 		set_physics_process(false)
 		return
+
+	# Decrement the jump cool-down on each physics update
+	if _jump_cooldown:
+		_jump_cooldown -= 1
 
 	# Update the kinematic body to be under the camera
 	_update_body_under_camera()
@@ -175,10 +187,11 @@ func _physics_process(delta):
 	# - Read and modify the player velocity
 	# - Read and modify the ground-control velocity
 	# - Perform exclusive updating of the player (bypassing other movement providers)
+	# - Request a jump
 	ground_control_velocity = Vector2.ZERO
 	var exclusive := false
 	for p in _movement_providers:
-		if p.enabled:
+		if p.enabled or p.is_active:
 			if p.physics_movement(delta, self):
 				exclusive = true
 				break
@@ -186,12 +199,45 @@ func _physics_process(delta):
 	# If no controller has performed an exclusive-update then apply gravity and
 	# perform any ground-control
 	if !exclusive:
-		velocity.y += gravity * delta
+		if on_ground and ground_physics.stop_on_slope and ground_angle < ground_physics.move_max_slope:
+			# Apply gravity towards slope to prevent sliding
+			velocity += ground_vector * gravity * delta
+		else:
+			# Apply gravity down
+			velocity += Vector3.UP * gravity * delta
 		_apply_velocity_and_control(delta)
 
 	# Apply the player-body movement to the XR origin
 	var movement := kinematic_node.global_transform.origin - position_before_movement
 	origin_node.global_transform.origin += movement
+
+# Request a jump
+func request_jump(skip_jump_velocity := false):
+	# Skip if cooling down from a previous jump
+	if _jump_cooldown:
+		return;
+
+	# Skip if not on ground
+	if !on_ground:
+		return
+
+	# Skip if jump disabled on this ground
+	var jump_velocity := GroundPhysicsSettings.get_jump_velocity(ground_physics, default_physics)
+	if jump_velocity == 0.0:
+		return
+
+	# Skip if the ground is too steep to jump
+	var max_slope := GroundPhysicsSettings.get_jump_max_slope(ground_physics, default_physics)
+	if ground_angle > max_slope:
+		return
+
+	# Perform the jump
+	if !skip_jump_velocity:
+		velocity += ground_vector * jump_velocity * XRServer.world_scale
+
+	# Report the jump
+	emit_signal("player_jumped")
+	_jump_cooldown = 4
 
 # Perform a move_and_slide on the kinematic node
 func move_and_slide(p_velocity: Vector3) -> Vector3:
@@ -223,7 +269,7 @@ func _update_body_under_camera():
 	curr_transform.origin.y = origin_node.global_transform.origin.y
 
 	# The camera/eyes are towards the front of the body, so move the body back slightly
-	var forward_dir := -camera_transform.basis.z * horizontal
+	var forward_dir := -camera_transform.basis.z * HORIZONTAL
 	if forward_dir.length() > 0.01:
 		curr_transform.origin -= forward_dir.normalized() * eye_forward_offset * player_radius
 
@@ -245,7 +291,7 @@ func _update_ground_information():
 		ground_vector = ground_collision.get_normal()
 		ground_angle = rad2deg(ground_collision.get_angle())
 		ground_node = ground_collision.get_collider()
-		
+
 		# Select the ground physics
 		var physics_node := ground_node.get_node_or_null("GroundPhysics") as GroundPhysics
 		if physics_node:
@@ -261,7 +307,7 @@ func _update_ground_information():
 # This method applies the player velocity and ground-control velocity to the physical body
 func _apply_velocity_and_control(delta: float):
 	# Split the velocity into horizontal and vertical components
-	var horizontal_velocity := velocity * horizontal
+	var horizontal_velocity := velocity * HORIZONTAL
 	var vertical_velocity := velocity * Vector3.UP
 
 	# If the player is on the ground then give them control
@@ -270,8 +316,8 @@ func _apply_velocity_and_control(delta: float):
 		var control_velocity := Vector3.ZERO
 		if abs(ground_control_velocity.x) > 0.1 or abs(ground_control_velocity.y) > 0.1:
 			var camera_transform := camera_node.global_transform
-			var dir_forward := (camera_transform.basis.z * horizontal).normalized()
-			var dir_right := (camera_transform.basis.x * horizontal).normalized()
+			var dir_forward := (camera_transform.basis.z * HORIZONTAL).normalized()
+			var dir_right := (camera_transform.basis.x * HORIZONTAL).normalized()
 			control_velocity = (dir_forward * -ground_control_velocity.y + dir_right * ground_control_velocity.x) * XRServer.world_scale
 
 			# Apply control velocity to horizontal velocity based on traction
@@ -280,10 +326,10 @@ func _apply_velocity_and_control(delta: float):
 			horizontal_velocity = horizontal_velocity.lerp(control_velocity, traction_factor)
 
 			# Prevent the player from moving up steep slopes
-			var current_max_slope := GroundPhysicsSettings.get_move_max_slope(ground_physics, default_physics)	
+			var current_max_slope := GroundPhysicsSettings.get_move_max_slope(ground_physics, default_physics)
 			if ground_angle > current_max_slope:
 				# Get a vector in the down-hill direction
-				var down_direction := (ground_vector * horizontal).normalized()
+				var down_direction := (ground_vector * HORIZONTAL).normalized()
 				var vdot = down_direction.dot(horizontal_velocity)
 				if vdot < 0:
 					horizontal_velocity -= down_direction * vdot
@@ -317,13 +363,13 @@ func _guaranteed_physics():
 # - Maximum slope is valid
 func _get_configuration_warning():
 	# Check the origin node
-	var test_origin_node = _get_origin_node()
-	if !test_origin_node or !test_origin_node is XROrigin3D:
+	var test_origin_node = XRHelpers.get_xr_origin(self)
+	if !test_origin_node:
 		return "Unable to find XR Origin node"
 
 	# Check the camera node
-	var test_camera_node = _get_camera_node()
-	if !test_camera_node or !test_camera_node is XRCamera3D:
+	var test_camera_node = XRHelpers.get_xr_camera(self)
+	if !test_camera_node:
 		return "Unable to find XR Camera node"
 
 	# Verify the player radius is valid
@@ -341,3 +387,32 @@ func _get_configuration_warning():
 
 	# Passed basic validation
 	return ""
+
+## Find the Player Body from a player node and an optional path
+static func get_player_body(node: Node, path: NodePath = NodePath()) -> PlayerBody:
+	var player_body: PlayerBody
+
+	# Try using the node path first
+	if path:
+		player_body = node.get_node(path) as PlayerBody
+		if player_body:
+			return player_body
+
+	# Get the origin
+	var xr_origin := XRHelpers.get_xr_origin(node)
+	if !xr_origin:
+		return null
+
+	# Attempt to get by the default name
+	player_body = xr_origin.get_node_or_null("PlayerBody") as PlayerBody
+	if player_body:
+		return player_body
+
+	# Search all children of the origin for the player body
+	for child in xr_origin.get_children():
+		player_body = child as PlayerBody
+		if player_body:
+			return player_body
+
+	# Could not find player body
+	return null

@@ -1,10 +1,10 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
+type="CompressedTexture2D"
 uid="uid://cho2aoqvhpf0u"
-path.s3tc="res://.godot/imported/Grass004_1K_Color.jpg-1c5b9fab5a80272ada8b786de4c00e18.s3tc.stex"
-path.etc2="res://.godot/imported/Grass004_1K_Color.jpg-1c5b9fab5a80272ada8b786de4c00e18.etc2.stex"
+path.s3tc="res://.godot/imported/Grass004_1K_Color.jpg-1c5b9fab5a80272ada8b786de4c00e18.s3tc.ctex"
+path.etc2="res://.godot/imported/Grass004_1K_Color.jpg-1c5b9fab5a80272ada8b786de4c00e18.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc", "etc2"],
 "vram_texture": true
@@ -13,7 +13,7 @@ metadata={
 [deps]
 
 source_file="res://assets/ambientCG.com/Grass004/Grass004_1K_Color.jpg"
-dest_files=["res://.godot/imported/Grass004_1K_Color.jpg-1c5b9fab5a80272ada8b786de4c00e18.s3tc.stex", "res://.godot/imported/Grass004_1K_Color.jpg-1c5b9fab5a80272ada8b786de4c00e18.etc2.stex"]
+dest_files=["res://.godot/imported/Grass004_1K_Color.jpg-1c5b9fab5a80272ada8b786de4c00e18.s3tc.ctex", "res://.godot/imported/Grass004_1K_Color.jpg-1c5b9fab5a80272ada8b786de4c00e18.etc2.ctex"]
 
 [params]
 

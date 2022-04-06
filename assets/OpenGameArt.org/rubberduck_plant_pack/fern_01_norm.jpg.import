@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
+type="CompressedTexture2D"
 uid="uid://d0j8ky54jvqhx"
-path="res://.godot/imported/fern_01_norm.jpg-b1330c8b802d20ec97433764d385dc78.stex"
+path="res://.godot/imported/fern_01_norm.jpg-b1330c8b802d20ec97433764d385dc78.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://assets/OpenGameArt.org/rubberduck_plant_pack/fern_01_norm.jpg"
-dest_files=["res://.godot/imported/fern_01_norm.jpg-b1330c8b802d20ec97433764d385dc78.stex"]
+dest_files=["res://.godot/imported/fern_01_norm.jpg-b1330c8b802d20ec97433764d385dc78.ctex"]
 
 [params]
 

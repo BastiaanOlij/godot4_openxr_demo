@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
+type="CompressedTexture2D"
 uid="uid://drmtgr23ncy0t"
-path="res://.godot/imported/flower_bush_01_norm.jpg-d140572f9a96b698f559a1efcfe1076d.stex"
+path="res://.godot/imported/flower_bush_01_norm.jpg-d140572f9a96b698f559a1efcfe1076d.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://assets/OpenGameArt.org/rubberduck_plant_pack/flower_bush_01_norm.jpg"
-dest_files=["res://.godot/imported/flower_bush_01_norm.jpg-d140572f9a96b698f559a1efcfe1076d.stex"]
+dest_files=["res://.godot/imported/flower_bush_01_norm.jpg-d140572f9a96b698f559a1efcfe1076d.ctex"]
 
 [params]
 
