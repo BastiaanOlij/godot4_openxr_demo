@@ -5,3 +5,7 @@
 [resource]
 render_priority = 0
 shader = ExtResource( "1" )
+shader_param/length = null
+shader_param/mix_color = null
+shader_param/scale_t = null
+shader_param/ws = null
