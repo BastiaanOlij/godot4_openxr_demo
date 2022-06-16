@@ -136,8 +136,8 @@ _global_script_class_icons={
 
 config/name="OpenXRCore4"
 run/main_scene="res://Main.tscn"
-config/icon="res://icon.png"
 config/features=PackedStringArray("4.0", "Vulkan Mobile")
+config/icon="res://icon.png"
 
 [display]
 
@@ -153,7 +153,6 @@ import/blender/enabled=false
 
 [rendering]
 
-vulkan/rendering/back_end=1
 xr/enabled=true
 
 [xr]
