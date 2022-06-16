@@ -17,3 +17,8 @@ func _ready():
 
 func _on_right_hand_button_pressed(p_name):
 	print("Pressed " + str(p_name))
+
+func _input(event):
+	if event is InputEventKey:
+		if event.is_action_pressed("ui_cancel"):
+			get_tree().quit()

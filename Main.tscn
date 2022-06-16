@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://dp1w8qmqbqe41"]
+[gd_scene load_steps=40 format=3 uid="uid://dp1w8qmqbqe41"]
 
 [ext_resource type="Script" path="res://Main.gd" id="1_yxygs"]
 [ext_resource type="PackedScene" uid="uid://dkbe7ndgv0ovc" path="res://addons/godot-xr-tools/functions/Function_Direct_movement.tscn" id="2_g0m70"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://dxwrf3facunbq" path="res://addons/godot-xr-tools/assets/PlayerBody.tscn" id="6_pxggg"]
 [ext_resource type="PackedScene" path="res://addons/godot-xr-tools/functions/Function_Climb_movement.tscn" id="8_14dk1"]
 [ext_resource type="Texture2D" uid="uid://cho2aoqvhpf0u" path="res://assets/ambientCG.com/Grass004/Grass004_1K_Color.jpg" id="10_4gi21"]
+[ext_resource type="ArrayMesh" uid="uid://citqp4t547mn" path="res://assets/htc/vr_tracker_vive_3_0/vr_tracker_vive_3_0.obj" id="10_6cagh"]
 [ext_resource type="Texture2D" uid="uid://wnewp7iuahdu" path="res://assets/ambientCG.com/Grass004/Grass004_1K_NormalGL.jpg" id="11_kkfc6"]
 [ext_resource type="Texture2D" uid="uid://bi56aarct11p6" path="res://assets/ambientCG.com/Grass004/Grass004_1K_Roughness.jpg" id="12_mutam"]
 [ext_resource type="PackedScene" uid="uid://c7mq5w60bchs0" path="res://scenes/MonkeyBars.tscn" id="13_y2500"]
@@ -277,6 +278,13 @@ max_samples = 10
 [node name="Function_Climb_movement" parent="XROrigin3D" instance=ExtResource( "8_14dk1" )]
 left_pickup = NodePath("../LeftHand/Function_Pickup")
 right_pickup = NodePath("../RightHand/Function_Pickup")
+
+[node name="HTC_Tracker_Keyboard" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.39313, 0)
+tracker = &"/user/vive_tracker_htcx/role/keyboard"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/HTC_Tracker_Keyboard"]
+mesh = ExtResource( "10_6cagh" )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( "Environment_v7gtd" )
