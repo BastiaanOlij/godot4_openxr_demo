@@ -178,7 +178,7 @@ func _physics_process(delta):
 		var cast_length = 0.0
 		var fine_tune = 1.0
 		var hit_something = false
-		var max_slope_cos = cos(deg2rad(max_slope))
+		var max_slope_cos = cos(deg_to_rad(max_slope))
 		for i in range(1,26):
 			var new_cast_length = cast_length + (step_size / fine_tune)
 			var global_target = Vector3(0.0, 0.0, -new_cast_length)

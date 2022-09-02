@@ -1,7 +1,13 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://ceu21ibocsokq"]
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://ceu21ibocsokq"]
 
 [ext_resource type="Shader" path="res://addons/godot-xr-tools/materials/teleport.gdshader" id="1"]
+[ext_resource type="Texture2D" uid="uid://ddoj6c345cb0c" path="res://addons/godot-xr-tools/images/teleport_arrow.png" id="2_5os8b"]
 
 [resource]
 render_priority = 0
-shader = ExtResource( "1" )
+shader = ExtResource("1")
+arrow_texture = ExtResource("2_5os8b")
+length = 20.0
+mix_color = Color(0.0156863, 0.419608, 0.737255, 1)
+scale_t = 0.2
+ws = null
