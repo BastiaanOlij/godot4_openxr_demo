@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://c2rw7qusg8l63"]
+
+[ext_resource type="PackedScene" uid="uid://bs5xn2f4c7i42" path="res://assets/valve_hand_models/left_hand.glb" id="1_mtl7q"]
+
+[node name="OpenXrLeftHand" type="OpenXRHand"]
+motion_range = 1
+hand_skeleton = NodePath("LeftHandModel/Armature001/Skeleton3D")
+
+[node name="LeftHandModel" parent="." instance=ExtResource("1_mtl7q")]
+
+[editable path="LeftHandModel"]
