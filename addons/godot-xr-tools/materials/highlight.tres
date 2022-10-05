@@ -66,4 +66,4 @@ nodes/fragment/connections = PackedInt32Array(2, 0, 3, 0, 3, 0, 0, 0, 4, 0, 3, 1
 [resource]
 render_priority = 0
 shader = SubResource("6")
-ColorParameter = null
+shader_parameter/ColorParameter = null

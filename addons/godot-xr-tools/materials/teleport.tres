@@ -6,8 +6,8 @@
 [resource]
 render_priority = 0
 shader = ExtResource("1")
-arrow_texture = ExtResource("2_5os8b")
-length = 20.0
-mix_color = Color(0.0156863, 0.419608, 0.737255, 1)
-scale_t = 0.2
-ws = null
+shader_parameter/arrow_texture = ExtResource("2_5os8b")
+shader_parameter/length = 20.0
+shader_parameter/mix_color = Color(0.0156863, 0.419608, 0.737255, 1)
+shader_parameter/scale_t = 0.2
+shader_parameter/ws = null

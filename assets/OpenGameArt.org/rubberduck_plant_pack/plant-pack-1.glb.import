@@ -15,6 +15,7 @@ dest_files=["res://.godot/imported/plant-pack-1.glb-ae0fc25c7cd038c06789d187eac1
 
 nodes/root_type="Node3D"
 nodes/root_name="Scene Root"
+nodes/apply_root_scale=true
 nodes/root_scale=1.0
 meshes/ensure_tangents=true
 meshes/generate_lods=true

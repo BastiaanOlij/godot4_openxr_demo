@@ -245,6 +245,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
 
 [node name="Vignette" parent="XROrigin3D/XRCamera3D" instance=ExtResource("2_jb8qg")]
 
+[node name="FPS" type="Label3D" parent="XROrigin3D/XRCamera3D"]
+transform = Transform3D(0.992897, 0, 0.118976, 0.0257389, 0.976319, -0.214801, -0.116158, 0.216337, 0.969384, -0.303358, 0.216087, -1.31866)
+text = "FPS: 999"
+
 [node name="LeftHand" type="XRController3D" parent="XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -0.5)
 tracker = &"left_hand"
@@ -284,7 +288,6 @@ environment = SubResource("Environment_v7gtd")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.734349, -0.548768, 0.399481, 0.189303, 0.730762, 0.65586, -0.65184, -0.406007, 0.640518, 0, 4.81216, 1.27972)
 light_energy = 2.0
-shadow_enabled = true
 
 [node name="Floor" type="StaticBody3D" parent="."]
 
