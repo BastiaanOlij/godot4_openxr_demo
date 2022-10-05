@@ -244,9 +244,9 @@ func _physics_process(delta):
 				break
 		
 		# and just update our shader
-		$Teleport.get_surface_override_material(0).set_shader_param("scale_t", 1.0 / strength)
-		$Teleport.get_surface_override_material(0).set_shader_param("ws", ws)
-		$Teleport.get_surface_override_material(0).set_shader_param("length", cast_length)
+		$Teleport.get_surface_override_material(0).set_shader_parameter("scale_t", 1.0 / strength)
+		$Teleport.get_surface_override_material(0).set_shader_parameter("ws", ws)
+		$Teleport.get_surface_override_material(0).set_shader_parameter("length", cast_length)
 		if hit_something:
 			var color = can_teleport_color
 			var normal = Vector3.UP
@@ -273,13 +273,13 @@ func _physics_process(delta):
 			last_target_transform.origin = target_global_origin + Vector3(0.0, 0.001, 0.0)
 			$Target.global_transform = last_target_transform
 			
-			$Teleport.get_surface_override_material(0).set_shader_param("mix_color", color)
+			$Teleport.get_surface_override_material(0).set_shader_parameter("mix_color", color)
 			$Target.get_surface_override_material(0).albedo_color = color
 			$Target.visible = can_teleport
 		else:
 			can_teleport = false
 			$Target.visible = false
-			$Teleport.get_surface_override_material(0).set_shader_param("mix_color", no_collision_color)
+			$Teleport.get_surface_override_material(0).set_shader_parameter("mix_color", no_collision_color)
 	elif is_teleporting:
 		if can_teleport:
 			

@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://b0ywd51y32i51"]
 
 [ext_resource type="Script" path="res://addons/godot-xr-tools/functions/Function_Teleport.gd" id="1"]
-[ext_resource type="Material" uid="uid://ceu21ibocsokq" path="res://addons/godot-xr-tools/materials/teleport.tres" id="2"]
+[ext_resource type="Material" path="res://addons/godot-xr-tools/materials/teleport.tres" id="2"]
 [ext_resource type="Material" path="res://addons/godot-xr-tools/materials/target.tres" id="3"]
 [ext_resource type="Material" path="res://addons/godot-xr-tools/materials/capule.tres" id="4"]
 
@@ -14,7 +14,6 @@ size = Vector2(1, 1)
 
 [sub_resource type="CapsuleMesh" id="3"]
 radius = 0.4
-height = 1.8
 
 [sub_resource type="CapsuleShape3D" id="4"]
 radius = 0.05
