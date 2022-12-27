@@ -10,15 +10,13 @@ func _ready():
 	if interface and interface.is_initialized():
 		print("OpenXR initialised successfully")
 
-		var vp : Viewport = get_viewport()
+		var vp : SubViewport = $HMDOutput
 		vp.use_xr = true
-		
+
 		# vp.vrs_mode = Viewport.VRS_XR
+		$DesktopOutputContainer/DesktopOutput/CanvasLayer/TextureRect.texture = vp.get_texture()
 	else:
 		print("OpenXR not initialised, please check if your headset is connected")
 
 func _on_right_hand_button_pressed(p_name):
 	print("Pressed " + str(p_name))
-
-func _process(delta):
-	$XROrigin3D/XRCamera3D/FPS.text = "FPS: %d" % Engine.get_frames_per_second()
